@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Property Assistant Technology (PAT) – AI for Property & Facilities Teams</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Property Assistant Technology (PAT) is an AI-powered assistant for property, facilities, and maintenance teams. Centralize drawings, manuals, and building knowledge in one smart, searchable platform." />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-alt: #0b1020;
+      --card: #0b1120;
+      --accent: #06b6d4;
+      --accent-soft: rgba(6,182,212,0.18);
+      --accent-strong: #22d3ee;
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --border-subtle: #1f2937;
+      --radius-xl: 20px;
+      --shadow-soft: 0 18px 45px rgba(0,0,0,0.6);
+      --max-width: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, #0b1120 0, #020617 45%, #020617 100%);
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .page { min-height: 100vh; display: flex; flex-direction: column; }
+    .wrapper {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Header */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(18px);
+      background: linear-gradient(to bottom, rgba(2,6,23,0.98), rgba(2,6,23,0.8), transparent);
+      border-bottom: 1px solid rgba(15,23,42,0.9);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 0.9rem 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 20% 0%, #22d3ee, #0ea5e9, #164e63);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #020617;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.65);
+    }
+
+    .brand-text-primary {
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      font-size: 1.05rem;
+    }
+
+    .brand-text-secondary {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.75rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      position: relative;
+      padding-bottom: 0.15rem;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: 0;
+      width: 0; height: 2px;
+      background: linear-gradient(to right, var(--accent), var(--accent-strong));
+      border-radius: 999px;
+      transition: width 0.18s ease;
+    }
+
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.5);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .btn,
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1.05rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease, color 0.12s ease;
+    }
+
+    .btn {
+      border: none;
+      background: linear-gradient(to right, var(--accent), var(--accent-strong));
+      color: #020617;
+      box-shadow: 0 10px 25px rgba(15,23,42,0.9);
+    }
+
+    .btn span.icon { font-size: 1.05rem; }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 35px rgba(15,23,42,1);
+    }
+
+    .btn-outline {
+      border: 1px solid rgba(148,163,184,0.7);
+      background: transparent;
+      color: var(--muted);
+      box-shadow: none;
+    }
+
+    .btn-outline:hover {
+      background: rgba(15,23,42,0.95);
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    /* Hero */
+
+    main { flex: 1; }
+
+    .hero {
+      padding: 3.5rem 0 3rem;
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.1fr);
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      padding: 0.18rem 0.8rem 0.18rem 0.22rem;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.55);
+      margin-bottom: 1.1rem;
+    }
+
+    .hero-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 6px rgba(34,197,94,0.4);
+    }
+
+    .hero-kicker span.label {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .hero-kicker span.tag {
+      padding: 0.12rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.98);
+      border: 1px solid rgba(55,65,81,0.9);
+      color: #e5e7eb;
+      font-size: 0.72rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.4rem, 4vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: 0.01em;
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-title span.accent {
+      background: linear-gradient(to right, var(--accent-strong), #38bdf8);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      color: var(--muted);
+      max-width: 32rem;
+      font-size: 0.98rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .hero-subtitle strong {
+      color: #e5e7eb;
+      font-weight: 600;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-footnote {
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hero-footnote span.dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(148,163,184,0.7);
+    }
+
+    .hero-footnote strong {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    /* Hero right: mock chat */
+
+    .hero-panel {
+      background: radial-gradient(circle at top left, rgba(34,211,238,0.12), rgba(15,23,42,0.98));
+      border-radius: 28px;
+      border: 1px solid rgba(148,163,184,0.5);
+      box-shadow: var(--shadow-soft);
+      padding: 1.6rem 1.6rem 1.9rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background-image:
+        radial-gradient(circle at 0% 0%, rgba(56,189,248,0.18), transparent 55%),
+        radial-gradient(circle at 120% 20%, rgba(14,165,233,0.24), transparent 55%);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .hero-panel-inner { position: relative; z-index: 1; }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+
+    .panel-header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .panel-title {
+      font-size: 0.98rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .panel-title span.badge {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      padding: 0.08rem 0.45rem;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.95);
+      border: 1px solid rgba(148,163,184,0.6);
+      color: var(--muted);
+      letter-spacing: 0.12em;
+    }
+
+    .panel-subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .panel-meta {
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    .panel-meta span.status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 5px rgba(34,197,94,0.32);
+    }
+
+    .panel-window-dots {
+      display: flex;
+      gap: 0.3rem;
+    }
+
+    .panel-window-dots span {
+      width: 8px; height: 8px;
+      border-radius: 999px;
+      background: rgba(148,163,184,0.55);
+    }
+
+    .panel-window-dots span:nth-child(1) { background: #f97316; }
+    .panel-window-dots span:nth-child(2) { background: #facc15; }
+    .panel-window-dots span:nth-child(3) { background: #22c55e; }
+
+    .panel-body {
+      background: rgba(15,23,42,0.97);
+      border-radius: 18px;
+      padding: 1rem;
+      border: 1px solid rgba(37,99,235,0.9);
+      margin-bottom: 1rem;
+    }
+
+    .chat-bubble {
+      max-width: 100%;
+      border-radius: 16px;
+      padding: 0.7rem 0.9rem;
+      font-size: 0.85rem;
+      margin-bottom: 0.55rem;
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 0.55rem;
+    }
+
+    .chat-bubble.user {
+      margin-left: auto;
+      background: rgba(15,23,42,0.95);
+      border: 1px solid rgba(148,163,184,0.6);
+    }
+
+    .chat-bubble.ai {
+      background: rgba(15,23,42,1);
+      border: 1px solid rgba(34,211,238,0.9);
+      box-shadow: 0 14px 30px rgba(15,23,42,0.9);
+    }
+
+    .chat-bubble .avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 0% 0%, #22d3ee, #0ea5e9, #0369a1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #020617;
+      flex-shrink: 0;
+    }
+
+    .chat-bubble.user .avatar {
+      background: rgba(148,163,184,0.3);
+      color: #e5e7eb;
+    }
+
+    .chat-text { color: #e5e7eb; }
+
+    .chat-text span.dim {
+      color: var(--muted);
+      font-size: 0.78rem;
+      display: block;
+      margin-top: 0.2rem;
+    }
+
+    .prompt-input {
+      margin-top: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: rgba(15,23,42,0.96);
+      border-radius: 999px;
+      padding: 0.5rem 0.8rem;
+      border: 1px solid rgba(75,85,99,0.95);
+    }
+
+    .prompt-input input {
+      background: transparent;
+      border: none;
+      outline: none;
+      flex: 1;
+      font-size: 0.85rem;
+      color: #e5e7eb;
+    }
+
+    .prompt-input input::placeholder {
+      color: rgba(148,163,184,0.9);
+    }
+
+    .prompt-send {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      background: linear-gradient(to right, var(--accent), var(--accent-strong));
+      color: #020617;
+      box-shadow: 0 8px 20px rgba(15,23,42,0.95);
+    }
+
+    .panel-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .mini-metrics {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .mini-chip {
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.96);
+      border: 1px solid rgba(55,65,81,0.95);
+      font-size: 0.74rem;
+    }
+
+    /* Sections */
+
+    section { padding: 3rem 0; }
+
+    .section-heading { margin-bottom: 1.5rem; }
+
+    .section-kicker {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 0.45rem;
+    }
+
+    .section-title {
+      font-size: 1.45rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 36rem;
+    }
+
+    /* Features */
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem;
+      margin-top: 0.75rem;
+    }
+
+    .feature-card {
+      background: var(--card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-subtle);
+      padding: 1rem;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(34,211,238,0.18), transparent 60%);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .feature-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.05rem;
+      background: rgba(15,23,42,0.96);
+      border: 1px solid rgba(55,65,81,0.95);
+      margin-bottom: 0.65rem;
+    }
+
+    .feature-title {
+      font-size: 0.98rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .feature-body {
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    /* How it works */
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 0.75rem;
+    }
+
+    .step-card {
+      position: relative;
+      background: rgba(15,23,42,0.96);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-subtle);
+      padding: 1rem;
+    }
+
+    .step-number {
+      position: absolute;
+      top: 0.7rem;
+      right: 0.9rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .step-label {
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .step-body {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* Solutions */
+
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .solutions-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .solution-pill {
+      background: rgba(15,23,42,0.96);
+      border-radius: 16px;
+      border: 1px solid var(--border-subtle);
+      padding: 0.8rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .mock-screenshot {
+      background: radial-gradient(circle at top left, rgba(34,211,238,0.22), rgba(15,23,42,0.98));
+      border-radius: 24px;
+      border: 1px solid rgba(148,163,184,0.6);
+      box-shadow: var(--shadow-soft);
+      padding: 1rem;
+      font-size: 0.8rem;
+    }
+
+    .mock-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+      font-size: 0.8rem;
+    }
+
+    .mock-body {
+      border-radius: 14px;
+      border: 1px solid rgba(37,99,235,0.9);
+      background: rgba(15,23,42,0.98);
+      padding: 0.8rem;
+    }
+
+    .mock-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      padding: 0.35rem 0;
+      border-bottom: 1px dashed rgba(55,65,81,0.9);
+    }
+
+    .mock-row:last-child { border-bottom: none; }
+
+    .mock-label { color: var(--muted); }
+    .mock-value { color: #e5e7eb; }
+
+    .mock-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.96);
+      border: 1px solid rgba(148,163,184,0.7);
+      color: var(--muted);
+      margin-top: 0.6rem;
+    }
+
+    /* About */
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .about-card {
+      background: var(--card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-subtle);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-soft);
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .about-card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 0.4rem;
+      color: #e5e7eb;
+    }
+
+    .about-card p + p { margin-top: 0.5rem; }
+
+    .about-meta {
+      background: rgba(15,23,42,0.98);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-subtle);
+      padding: 1.1rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .about-meta strong { color: #e5e7eb; }
+
+    .about-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.6rem;
+    }
+
+    .about-tag {
+      font-size: 0.76rem;
+      padding: 0.18rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.98);
+      border: 1px solid rgba(55,65,81,0.95);
+    }
+
+    /* Pricing / CTA */
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .pricing-card {
+      background: var(--card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-subtle);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .pricing-pill {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      padding: 0.18rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .pricing-headline {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .pricing-body {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 0.9rem;
+    }
+
+    .pricing-points {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    .pricing-points li {
+      display: flex;
+      gap: 0.4rem;
+      align-items: baseline;
+      margin-bottom: 0.4rem;
+    }
+
+    .pricing-points span.bullet {
+      font-size: 0.9rem;
+      color: #22c55e;
+    }
+
+    /* Contact */
+
+    .contact-card {
+      background: rgba(15,23,42,0.98);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-subtle);
+      padding: 1.2rem;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    form {
+      display: grid;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    label span { color: var(--muted); }
+
+    input, textarea {
+      background: #020617;
+      border-radius: 999px;
+      border: 1px solid rgba(55,65,81,0.95);
+      padding: 0.55rem 0.8rem;
+      font-size: 0.86rem;
+      color: #e5e7eb;
+      outline: none;
+    }
+
+    textarea {
+      border-radius: 14px;
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(148,163,184,0.85);
+    }
+
+    .contact-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.6rem;
+    }
+
+    .contact-aside {
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .contact-aside strong { color: #e5e7eb; }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.6rem;
+    }
+
+    .tag {
+      font-size: 0.76rem;
+      padding: 0.18rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.98);
+      border: 1px solid rgba(55,65,81,0.95);
+    }
+
+    footer {
+      border-top: 1px solid rgba(15,23,42,0.98);
+      padding: 1.2rem 0 2rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .pill-beta {
+      background: var(--accent-soft);
+      border-radius: 999px;
+      padding: 0.15rem 0.55rem;
+      font-size: 0.76rem;
+      color: #e0f2fe;
+      border: 1px solid rgba(148,163,184,0.4);
+    }
+
+    /* Responsive */
+
+    @media (max-width: 900px) {
+      .hero-layout { grid-template-columns: minmax(0, 1fr); }
+      .hero { padding-top: 2.6rem; }
+      .features-grid,
+      .steps-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .solutions-grid,
+      .pricing-grid,
+      .contact-grid,
+      .about-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav { flex-wrap: wrap; gap: 0.75rem; }
+      .nav-links { display: none; }
+      .hero { padding-top: 2rem; }
+      .features-grid,
+      .steps-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .wrapper { padding: 0 1.1rem; }
+      .hero-title { font-size: 2.1rem; }
+      .hero-panel { padding: 1.35rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="wrapper">
+        <nav class="nav">
+          <a href="#top" class="brand">
+            <div class="brand-mark">PAT</div>
+            <div>
+              <div class="brand-text-primary">Property Assistant Technology</div>
+              <div class="brand-text-secondary">Property · Facilities · Maintenance AI</div>
+            </div>
+          </a>
+
+          <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#solutions">Solutions</a>
+            <a href="#about">About</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#contact">Contact</a>
+          </div>
+
+          <div class="nav-cta">
+            <div class="pill">Private · Secure · On-Premise</div>
+            <button class="btn-outline" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'});">
+              Talk with us
+            </button>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- Hero -->
+      <section class="hero">
+        <div class="wrapper">
+          <div class="hero-layout">
+            <div>
+              <div class="hero-kicker">
+                <span class="hero-dot"></span>
+                <span class="label">AI for real-world properties</span>
+                <span class="tag">Commercial · Hospitality · Industrial · Mixed-Use</span>
+              </div>
+
+              <h1 class="hero-title">
+                Meet <span class="accent">PAT</span>, your<br />Property Assistant Technology.
+              </h1>
+
+              <p class="hero-subtitle">
+                An AI assistant trained on your <strong>drawings, BAS, O&amp;M manuals, and as-builts</strong> so your team can ask:
+                <strong>“Where is the breaker for room 1524?”</strong> — and get the answer in seconds, whether it’s a hotel, office,
+                warehouse, or mixed-use site.
+              </p>
+
+              <p class="hero-subtitle">
+                PAT helps property, facility, and maintenance teams find answers instantly — improving uptime, safety, and efficiency.
+              </p>
+
+              <div class="hero-actions">
+                <button class="btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'});">
+                  <span class="icon">⚡</span>
+                  <span>Request a demo</span>
+                </button>
+                <button class="btn-outline" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'});">
+                  See how PAT works
+                </button>
+              </div>
+
+              <div class="hero-footnote">
+                <span>Designed for property, facilities, and maintenance leaders who live in the real world:</span>
+                <span class="dot"></span>
+                <strong>Faster answers · Fewer callbacks · Less chaos</strong>
+              </div>
+            </div>
+
+            <!-- Hero right: mock interface -->
+            <div class="hero-panel" aria-hidden="true">
+              <div class="hero-panel-inner">
+                <div class="panel-header">
+                  <div class="panel-header-left">
+                    <div class="panel-title">
+                      How can PAT help you today?
+                      <span class="badge">Preview</span>
+                    </div>
+                    <div class="panel-subtitle">
+                      Property &amp; Facilities AI assistant
+                    </div>
+                    <div class="panel-meta">
+                      <span class="status-dot"></span>
+                      <span>Online · Answering in seconds</span>
+                    </div>
+                  </div>
+                  <div class="panel-window-dots">
+                    <span></span><span></span><span></span>
+                  </div>
+                </div>
+
+                <div class="panel-body">
+                  <div class="chat-bubble user">
+                    <div class="avatar">U</div>
+                    <div class="chat-text">
+                      Where is the breaker for room 1524?
+                      <span class="dim">Maintenance · 09:14</span>
+                    </div>
+                  </div>
+
+                  <div class="chat-bubble ai">
+                    <div class="avatar">P</div>
+                    <div class="chat-text">
+                      Panel <strong>EP-3B</strong> on Level 3 Service Corridor, across from Housekeeping.
+                      <br />
+                      <span class="dim">
+                        Breaker: <strong>3-21</strong> · 20A · Labeled “GH – 1524”
+                        <br />
+                        Path: Freight elevator → Service corridor → Second panel on the left.
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="prompt-input">
+                    <input type="text" placeholder="Ask PAT: “Show me isolation valves for the spa loop”" />
+                    <button class="prompt-send">➤</button>
+                  </div>
+                </div>
+
+                <div class="panel-foot">
+                  <div class="mini-metrics">
+                    <div class="mini-chip">–63% time spent hunting panels</div>
+                    <div class="mini-chip">+ Better knowledge retention</div>
+                  </div>
+                  <div>Data stays on your property.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features -->
+      <section id="features">
+        <div class="wrapper">
+          <div class="section-heading">
+            <div class="section-kicker">Why property teams use PAT</div>
+            <h2 class="section-title">Turn building documentation into a living assistant.</h2>
+            <p class="section-subtitle">
+              PAT connects the dots between your drawings, models, BAS, and real-world operations so your team can stop
+              digging through PDFs and start solving problems — across single assets or entire portfolios.
+            </p>
+          </div>
+
+          <div class="features-grid">
+            <article class="feature-card">
+              <div class="feature-icon">📚</div>
+              <h3 class="feature-title">All your building knowledge in one brain</h3>
+              <p class="feature-body">
+                Construction drawings, as-builts, MEP, risers, equipment schedules, sequences of operation, PMs, and SOPs —
+                indexed and searchable in natural language for your team.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">🧠</div>
+              <h3 class="feature-title">Ask questions, get answers — not files</h3>
+              <p class="feature-body">
+                “What feeds AHU-5?” “Show me the domestic booster pump alarms in plain English.” PAT responds with clear answers,
+                clickable references, and simple guidance.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">🔐</div>
+              <h3 class="feature-title">Built for secure environments</h3>
+              <p class="feature-body">
+                Your data stays inside your environment. PAT is designed to respect security, compliance, and regulatory
+                requirements for critical operations — from offices to gaming to industrial.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">🛠️</div>
+              <h3 class="feature-title">Made for techs, not just IT</h3>
+              <p class="feature-body">
+                Interfaces and prompts written in field language. Empower new techs on day one and protect years of institutional
+                knowledge from walking out the door.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">⏱️</div>
+              <h3 class="feature-title">Less hunting, more fixing</h3>
+              <p class="feature-body">
+                Technicians spend less time searching for breakers, valves, and panels — and more time resolving occupant- and
+                guest-impacting issues before they become problems.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">📊</div>
+              <h3 class="feature-title">Insights you can act on</h3>
+              <p class="feature-body">
+                Understand recurring issues, problematic zones, and chronic assets. PAT helps you tell the story behind your work
+                orders and justify capital requests with real data.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- How it works -->
+      <section id="how-it-works">
+        <div class="wrapper">
+          <div class="section-heading">
+            <div class="section-kicker">How PAT works</div>
+            <h2 class="section-title">From PDFs and sequences to a live property AI.</h2>
+            <p class="section-subtitle">
+              We start where you are: drawings, PDFs, control screenshots, spreadsheets, and SOPs. PAT turns that chaos into a
+              single, trusted source of truth for your team.
+            </p>
+          </div>
+
+          <div class="steps-grid">
+            <article class="step-card">
+              <div class="step-number">Step 01</div>
+              <h3 class="step-label">Connect your building documentation</h3>
+              <p class="step-body">
+                You share your drawings, as-builts, BAS exports, sequences of operation, PM templates, and vendor manuals.
+                PAT ingests and structures this information securely.
+              </p>
+            </article>
+
+            <article class="step-card">
+              <div class="step-number">Step 02</div>
+              <h3 class="step-label">Train PAT on your property</h3>
+              <p class="step-body">
+                Our engine learns your naming conventions, panel labels, mechanical rooms, and systems layout — in plain language a
+                tech would use on a night shift.
+              </p>
+            </article>
+
+            <article class="step-card">
+              <div class="step-number">Step 03</div>
+              <h3 class="step-label">Deploy to your maintenance team</h3>
+              <p class="step-body">
+                Your team accesses PAT through a simple web app or internal portal. Ask questions, search systems, and follow guided
+                flows from any device on your network.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Solutions -->
+      <section id="solutions">
+        <div class="wrapper">
+          <div class="section-heading">
+            <div class="section-kicker">Solutions</div>
+            <h2 class="section-title">For properties that can’t afford guesswork.</h2>
+            <p class="section-subtitle">
+              PAT is built for complex environments where one missed panel or valve can impact people, revenue, and safety.
+            </p>
+          </div>
+
+          <div class="solutions-grid">
+            <div class="solutions-list">
+              <div class="solution-pill">
+                <strong>Commercial &amp; Office</strong><br />
+                Multi-tenant office and corporate campuses — PAT helps your team quickly trace issues across shared systems,
+                floors, and risers.
+              </div>
+              <div class="solution-pill">
+                <strong>Hospitality &amp; Entertainment</strong><br />
+                Hotels, resorts, and gaming properties where uptime and guest experience are non-negotiable.
+              </div>
+              <div class="solution-pill">
+                <strong>Industrial &amp; Logistics</strong><br />
+                Warehouses, fulfillment centers, and plants with critical mechanical and electrical systems.
+              </div>
+              <div class="solution-pill">
+                <strong>Mixed-Use &amp; Retail</strong><br />
+                Retail centers, lifestyle properties, and mixed-use developments with complex utilities and shared infrastructure.
+              </div>
+            </div>
+
+            <aside class="mock-screenshot">
+              <div class="mock-header">
+                <div>Property Assistant – System Map</div>
+                <div class="panel-window-dots">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+              <div class="mock-body">
+                <div class="mock-row">
+                  <div class="mock-label">Query</div>
+                  <div class="mock-value">“Show all equipment fed from CDP-2”</div>
+                </div>
+                <div class="mock-row">
+                  <div class="mock-label">Result</div>
+                  <div class="mock-value">AHU-2, AHU-3, CHWP-1, CHWP-2, EF-07</div>
+                </div>
+                <div class="mock-row">
+                  <div class="mock-label">Next step</div>
+                  <div class="mock-value">Highlight path from main switchgear → CDP-2 → AHU-3</div>
+                </div>
+                <div class="mock-tag">
+                  <span>✅</span> Designed to sit alongside your CMMS &amp; BAS
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!--
